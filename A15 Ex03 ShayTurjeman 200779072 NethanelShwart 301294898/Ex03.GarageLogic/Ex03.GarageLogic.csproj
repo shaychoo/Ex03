@@ -35,12 +35,21 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Entities\Wheel.cs" />
-    <Compile Include="Vehicle\BaseVehicle.cs" />
+    <Compile Include="EnergySources\ElectricEnergySource.cs" />
+    <Compile Include="EnergySources\FuelEnergySource.cs" />
+    <Compile Include="BaseEntities\EnergySource.cs" />
+    <Compile Include="BaseEntities\Wheel.cs" />
+    <Compile Include="Exceptions\ValueOutOfRangeException.cs" />
+    <Compile Include="GarageManager.cs" />
+    <Compile Include="BaseEntities\Vehicle.cs" />
+    <Compile Include="Vehicles\Car.cs" />
+    <Compile Include="Vehicles\Motorcycle.cs" />
+    <Compile Include="Vehicles\Truck.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

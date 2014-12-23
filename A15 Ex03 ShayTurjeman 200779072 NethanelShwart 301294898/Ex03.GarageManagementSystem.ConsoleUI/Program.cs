@@ -8,7 +8,16 @@ namespace Ex03.GarageManagementSystem.ConsoleUI
     {
         public static void Main()
         {
-            
+            try
+            {
+                throw new Exception(null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Console.ReadLine();
         }
     }
 }

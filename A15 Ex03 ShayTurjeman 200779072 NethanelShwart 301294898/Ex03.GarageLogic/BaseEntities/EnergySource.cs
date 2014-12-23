@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ex03.GarageLogic
+namespace Ex03.GarageLogic.BaseEntities
 {
-    public class GarageManager
+    public abstract class EnergySource
     {
+
     }
 }
