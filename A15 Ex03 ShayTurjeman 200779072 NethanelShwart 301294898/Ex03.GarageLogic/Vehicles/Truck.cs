@@ -7,5 +7,8 @@ namespace Ex03.GarageLogic.Vehicles
 {
     public class Truck : Vehicle
     {
+        public Truck(EnergySource i_EnergySources) : base(i_EnergySources)
+        {
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace Ex03.GarageLogic.Exceptions
         {
 
         }
+
         public ValueOutOfRangeException(float i_MinValue, float i_MaxValue, string i_Message)
             : base(i_Message)
         {
@@ -40,7 +41,7 @@ namespace Ex03.GarageLogic.Exceptions
                 {
                     message = base.Message;
                 }
-                return string.Format("{0}, MinValue = {1}, MaxValue = {2}", message, MinValue, MaxValue);
+                return string.Format("{0}, Minimum Value = {1}, Maximum Value = {2}", message, MinValue, MaxValue);
             }
         }
     }

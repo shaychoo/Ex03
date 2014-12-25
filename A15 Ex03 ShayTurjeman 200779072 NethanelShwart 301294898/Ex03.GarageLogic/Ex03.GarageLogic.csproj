@@ -35,10 +35,16 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BaseEntities\EnergyFillingInfo.cs" />
+    <Compile Include="BaseEntities\VehicleInGarageInfo.cs" />
+    <Compile Include="Energies\ElectricityFillingInfo.cs" />
+    <Compile Include="Energies\FuelFillingInfo.cs" />
     <Compile Include="EnergySources\ElectricEnergySource.cs" />
     <Compile Include="EnergySources\FuelEnergySource.cs" />
     <Compile Include="BaseEntities\EnergySource.cs" />
     <Compile Include="BaseEntities\Wheel.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Exceptions\NotInGarageException.cs" />
     <Compile Include="Exceptions\ValueOutOfRangeException.cs" />
     <Compile Include="GarageManager.cs" />
     <Compile Include="BaseEntities\Vehicle.cs" />

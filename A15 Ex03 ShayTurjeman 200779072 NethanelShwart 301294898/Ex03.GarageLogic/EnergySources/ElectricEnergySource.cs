@@ -7,6 +7,9 @@ namespace Ex03.GarageLogic.EnergySources
 {
     public class ElectricEnergySource : EnergySource
     {
-
+        public override void Fill(EnergyFillingInfo i_Energy)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

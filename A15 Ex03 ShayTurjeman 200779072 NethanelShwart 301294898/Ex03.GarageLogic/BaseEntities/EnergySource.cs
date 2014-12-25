@@ -6,6 +6,6 @@ namespace Ex03.GarageLogic.BaseEntities
 {
     public abstract class EnergySource
     {
-
+        public abstract void Fill(EnergyFillingInfo i_Energy);
     }
 }
