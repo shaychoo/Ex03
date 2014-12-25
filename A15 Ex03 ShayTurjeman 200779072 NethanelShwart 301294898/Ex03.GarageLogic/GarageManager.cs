@@ -45,8 +45,8 @@ namespace Ex03.GarageLogic
         public void ChangeCarStatuse(string i_LicencePlate ,Enums.eStatusInGarage i_NewStatusInGarage)
         {
             Vehicle theVehicle = getVehicleInGarage(i_LicencePlate);
+
             r_VehiclesInGarageInfo[theVehicle].Status = i_NewStatusInGarage;
-            
         }
 
         public List<string> GetVehiclesLicencePlatesByStatussInGarage(Enums.eStatusInGarage i_StatussInGarage)
