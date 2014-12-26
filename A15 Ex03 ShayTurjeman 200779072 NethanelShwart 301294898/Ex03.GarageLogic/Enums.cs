@@ -21,5 +21,29 @@ namespace Ex03.GarageLogic
             Repaired = 2,
             Paid = 4,
         }
+
+        public enum eCarColor
+        {
+            White,
+            Green,
+            Blue,
+            Red,
+        }
+
+        public enum eDoorsNumber
+        {
+            Two,
+            Three,
+            Four,
+            Five
+        }
+
+        public enum eLicenseType
+        {
+            A,
+            A1,
+            AB,
+            B2,
+        }
     }
 }

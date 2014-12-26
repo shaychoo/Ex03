@@ -37,8 +37,13 @@
   <ItemGroup>
     <Compile Include="BaseEntities\EnergyFillingInfo.cs" />
     <Compile Include="BaseEntities\VehicleInGarageInfo.cs" />
-    <Compile Include="Energies\ElectricityFillingInfo.cs" />
-    <Compile Include="Energies\FuelFillingInfo.cs" />
+    <Compile Include="EnergiesFillingInfo\ElectricityFillingInfo.cs" />
+    <Compile Include="EnergiesFillingInfo\FuelFillingInfo.cs" />
+    <Compile Include="EnergiesFillingInfo\SpecificEnergiesFillingInfo\CarElectricityFillingInfo.cs" />
+    <Compile Include="EnergiesFillingInfo\SpecificEnergiesFillingInfo\CarFuelFillingInfo.cs" />
+    <Compile Include="EnergiesFillingInfo\SpecificEnergiesFillingInfo\MotorcycelElectricityFillingInfo.cs" />
+    <Compile Include="EnergiesFillingInfo\SpecificEnergiesFillingInfo\MotorcycelFuelFillingInfo.cs" />
+    <Compile Include="EnergiesFillingInfo\SpecificEnergiesFillingInfo\TruckFuelFillingInfo.cs" />
     <Compile Include="EnergySources\ElectricEnergySource.cs" />
     <Compile Include="EnergySources\FuelEnergySource.cs" />
     <Compile Include="BaseEntities\EnergySource.cs" />
@@ -48,6 +53,7 @@
     <Compile Include="Exceptions\ValueOutOfRangeException.cs" />
     <Compile Include="GarageManager.cs" />
     <Compile Include="BaseEntities\Vehicle.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Vehicles\Car.cs" />
     <Compile Include="Vehicles\Motorcycle.cs" />
     <Compile Include="Vehicles\Truck.cs" />
