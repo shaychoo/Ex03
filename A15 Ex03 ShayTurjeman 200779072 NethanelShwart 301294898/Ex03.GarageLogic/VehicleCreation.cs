@@ -10,29 +10,29 @@ namespace Ex03.GarageLogic
     public static class VehicleCreation
     {
         public static Vehicle CreateNewVehicle(eVehicleType i_VehicleType, eEnergySourceType i_EnergySourceType,
-            float i_CurrentEnergyAmount, string i_ModelName, string i_LicensePlate,
+            float i_CurrentEnergyAmount, string i_VehicleModelName, string i_WheelsManufacturerName, string i_LicensePlate, float i_CurrentAirPressure,
             params object[] i_SpecificVehicleParams)
         {
-            VehicleInfo vehicleInfo = getVehicleInfo(i_VehicleType, i_ModelName, i_LicensePlate, i_SpecificVehicleParams);
+            VehicleInfo vehicleInfo = getVehicleInfo(i_VehicleType, i_VehicleModelName, i_WheelsManufacturerName, i_LicensePlate, i_SpecificVehicleParams);
             EnergySource energySource = getEnergySource(i_VehicleType, i_EnergySourceType, i_CurrentEnergyAmount);
-            Vehicle resultVehicle = getVehicle(i_VehicleType, vehicleInfo, energySource);
+            Vehicle resultVehicle = getVehicle(i_VehicleType, vehicleInfo, energySource, i_CurrentAirPressure);
 
             return resultVehicle;
         }
 
-        private static Vehicle getVehicle(eVehicleType i_VehicleType, VehicleInfo vehicleInfo, EnergySource energySource)
+        private static Vehicle getVehicle(eVehicleType i_VehicleType, VehicleInfo vehicleInfo, EnergySource energySource, float i_CurrentAirPressure)
         {
             Vehicle resultVehicle;
             switch (i_VehicleType)
             {
                 case eVehicleType.Car:
-                    resultVehicle = new Car(vehicleInfo, energySource);
+                    resultVehicle = new Car(vehicleInfo, energySource, i_CurrentAirPressure);
                     break;
                 case eVehicleType.Motorcycle:
-                    resultVehicle = new Motorcycle(vehicleInfo, energySource);
+                    resultVehicle = new Motorcycle(vehicleInfo, energySource, i_CurrentAirPressure);
                     break;
                 case eVehicleType.Truck:
-                    resultVehicle = new Truck(vehicleInfo, energySource);
+                    resultVehicle = new Truck(vehicleInfo, energySource, i_CurrentAirPressure);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("i_VehicleType");
@@ -60,7 +60,7 @@ namespace Ex03.GarageLogic
             return energySource;
         }
 
-        private static VehicleInfo getVehicleInfo(eVehicleType i_VehicleType, string i_ModelName, string i_LicensePlate,
+        private static VehicleInfo getVehicleInfo(eVehicleType i_VehicleType, string i_VehicleModelName, string i_WheelsManufacturerName, string i_LicensePlate,
             object[] i_SpecificVehicleParams)
         {
             VehicleInfo vehicleInfo;
@@ -75,7 +75,7 @@ namespace Ex03.GarageLogic
                         Helpers.StrongArgumentNeededTypeCheckAndCast<Enums.eNumberOfDoors>(
                             i_SpecificVehicleParams[(int)eCarSpecificParams.NumberOfDoors]);
 
-                    vehicleInfo = new CarInfo(i_ModelName, i_LicensePlate, Constants.k_CarWheelsNumber,
+                    vehicleInfo = new CarInfo(i_VehicleModelName, i_WheelsManufacturerName, i_LicensePlate, Constants.k_CarWheelsNumber,
                         Constants.k_CarWheelsMaxAirPressure,
                         carColor, numberOfDoors);
 
@@ -88,13 +88,13 @@ namespace Ex03.GarageLogic
                         Helpers.StrongArgumentNeededTypeCheckAndCast<int>(
                             i_SpecificVehicleParams[(int)eMotorcycelSpecificParams.EngineVolume]);
 
-                    vehicleInfo = new MotorcycleInfo(i_ModelName, i_LicensePlate, Constants.k_MotorcycleWheelsNumber,
+                    vehicleInfo = new MotorcycleInfo(i_VehicleModelName, i_WheelsManufacturerName, i_LicensePlate, Constants.k_MotorcycleWheelsNumber,
                         Constants.k_MotorcycleWheelsMaxAirPressure, licenseType, engineVolume);
 
                     break;
                 case eVehicleType.Truck:
 
-                    vehicleInfo = new TruckInfo(i_ModelName, i_LicensePlate, Constants.k_TruckWheelsNumber,
+                    vehicleInfo = new TruckInfo(i_VehicleModelName, i_WheelsManufacturerName, i_LicensePlate, Constants.k_TruckWheelsNumber,
                         Constants.k_TruckWheelsMaxAirPressure);
 
                     break;
@@ -115,6 +115,8 @@ namespace Ex03.GarageLogic
                 case eVehicleType.Motorcycle:
                     electricityFillingInfo = new ElectricityFillingInfo(Constants.k_MotorcycleBatteryCapacity);
                     break;
+                case eVehicleType.Truck:
+                    throw new NotSupportedException("Truck with electricity engine is not supported");
                 default:
                     throw new ArgumentOutOfRangeException("i_VehicleType");
             }
@@ -142,18 +144,17 @@ namespace Ex03.GarageLogic
             return fuelFillingInfo;
         }
 
-        
         public enum eVehicleType
         {
-            Car = 1,
-            Motorcycle = 2,
-            Truck = 3,
+            Car = 0,
+            Motorcycle = 1,
+            Truck = 2,
         }
 
         public enum eEnergySourceType
         {
-            Fuel = 1,
-            Electricity = 2,
+            Fuel = 0,
+            Electricity = 1,
         }
 
         public enum eCarSpecificParams

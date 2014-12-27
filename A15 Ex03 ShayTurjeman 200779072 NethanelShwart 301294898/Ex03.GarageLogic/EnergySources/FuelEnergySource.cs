@@ -32,5 +32,10 @@ namespace Ex03.GarageLogic.EnergySources
                 FuelFillingInfo.MaximumAmount);
             CurrentEnergyAmount += i_Amount;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}", base.ToString());
+        }
     }
 }

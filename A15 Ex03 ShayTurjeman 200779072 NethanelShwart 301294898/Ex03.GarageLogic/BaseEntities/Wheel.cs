@@ -27,5 +27,11 @@ namespace Ex03.GarageLogic.BaseEntities
             Helpers.AddingValueInRangeCheck(i_Amount, CurrentAirPressure, k_MinInflatingValue, MaximumAirPressure);
             CurrentAirPressure += i_Amount;
         }
+
+        public override string ToString()
+        {
+            return string.Format("Manufacturer name: {0}, Maximum air pressure: {1}, Current air pressure: {2}",
+                ManufacturerName, MaximumAirPressure, CurrentAirPressure);
+        }
     }
 }

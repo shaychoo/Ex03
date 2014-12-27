@@ -9,5 +9,10 @@ namespace Ex03.GarageLogic.EnergiesFillingInfo
         {
             
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}", base.ToString());
+        }
     }
 }

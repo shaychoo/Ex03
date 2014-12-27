@@ -11,14 +11,18 @@ namespace Ex03.GarageLogic.BaseEntities
             OwnerName = i_OwnerName;
             Helpers.CheckPhoneFormat(i_OwnerPhone);
             OwnerPhone = i_OwnerPhone;
-            Status = i_Status;
+            StatusInGarage = i_Status;
         }
 
         public string OwnerName { get; set; }
 
         public string OwnerPhone { get; set; }
 
-        public Enums.eStatusInGarage Status { get; set; }
+        public Enums.eStatusInGarage StatusInGarage { get; set; }
 
+        public override string ToString()
+        {
+            return string.Format("Owner name: {0}, Owner phone number: {1}, Status in garage: {2}", OwnerName, OwnerPhone, StatusInGarage);
+        }
     }
 }

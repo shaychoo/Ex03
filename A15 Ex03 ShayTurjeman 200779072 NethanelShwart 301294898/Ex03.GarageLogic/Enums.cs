@@ -24,26 +24,26 @@ namespace Ex03.GarageLogic
 
         public enum eCarColor
         {
-            White,
-            Green,
-            Blue,
-            Red,
+            White = 0,
+            Green = 1,
+            Blue = 2,
+            Red = 3,
         }
 
         public enum eNumberOfDoors
         {
-            Two,
-            Three,
-            Four,
-            Five
+            Two = 0,
+            Three = 1,
+            Four = 2,
+            Five = 3
         }
 
         public enum eLicenseType
         {
-            A,
-            A1,
-            AB,
-            B2,
+            A = 0,
+            A1 = 1,
+            AB = 2,
+            B2 = 3,
         }
     }
 }

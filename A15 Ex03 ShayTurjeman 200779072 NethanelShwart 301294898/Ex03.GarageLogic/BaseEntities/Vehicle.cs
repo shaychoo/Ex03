@@ -4,10 +4,16 @@ namespace Ex03.GarageLogic.BaseEntities
 {
     public abstract class Vehicle
     {
-        public Vehicle(VehicleInfo i_VehicleInfo,EnergySource i_EnergySource)
+        public Vehicle(VehicleInfo i_VehicleInfo, EnergySource i_EnergySource, float i_CurrentAirPressure)
         {
             VehicleInfo = i_VehicleInfo;
             EnergySource = i_EnergySource;
+            Wheels = new List<Wheel>(VehicleInfo.NumberOfWheels);
+            for (int i = 0 ; i < VehicleInfo.NumberOfWheels ; i++)
+            {
+                Wheels.Add(new Wheel(VehicleInfo.WheelsManufacturerName, i_CurrentAirPressure,
+                    VehicleInfo.WheelsMaximumAirPressure));
+            }
         }
 
         protected VehicleInfo VehicleInfo { get; set; }
@@ -36,5 +42,17 @@ namespace Ex03.GarageLogic.BaseEntities
         }
 
         public string LicensePlate { get { return VehicleInfo.LicensePlate; } }
+
+        public override string ToString()
+        {
+            return string.Format(@"License plate: {0}, Remaining energy percentage: {1}.
+Vehicle info:
+{2}.
+Wheels info:
+{3}.
+Energy source info:
+{4}.", 
+                LicensePlate, RemainingEnergyPercentage, VehicleInfo.ToString(),Wheels[0].ToString(),EnergySource.ToString());
+        }
     }
 }

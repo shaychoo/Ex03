@@ -10,7 +10,8 @@ namespace Ex03.GarageLogic.Vehicles
     {
         private readonly CarInfo r_CarInfo;
 
-        public Car(VehicleInfo i_VehicleInfo, EnergySource i_EnergySource) : base(i_VehicleInfo, i_EnergySource)
+        public Car(VehicleInfo i_VehicleInfo, EnergySource i_EnergySource, float i_CurrentAirPressure)
+            : base(i_VehicleInfo, i_EnergySource, i_CurrentAirPressure)
         {
             r_CarInfo = Helpers.StrongArgumentNeededTypeCheckAndCast<CarInfo>(i_VehicleInfo);
         }

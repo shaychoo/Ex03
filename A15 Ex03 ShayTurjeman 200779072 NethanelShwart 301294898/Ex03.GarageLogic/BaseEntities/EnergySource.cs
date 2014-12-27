@@ -28,5 +28,10 @@ namespace Ex03.GarageLogic.BaseEntities
         {
             get { return (100.0f * CurrentEnergyAmount) / r_EnergyFillingInfo.MaximumAmount; }
         }
+
+        public override string ToString()
+        {
+            return string.Format(@"{0}", r_EnergyFillingInfo);
+        }
     }
 }

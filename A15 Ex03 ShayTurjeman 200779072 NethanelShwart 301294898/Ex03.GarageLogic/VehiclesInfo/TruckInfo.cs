@@ -7,9 +7,14 @@ namespace Ex03.GarageLogic.VehiclesInfo
 {
     public class TruckInfo : VehicleInfo
     {
-        public TruckInfo(string i_ModelName, string i_LicensePlate, int i_NumberOfWheels,float i_WheelsMaximumAirPressure)
-            : base(i_ModelName, i_LicensePlate, i_NumberOfWheels, i_WheelsMaximumAirPressure)
+        public TruckInfo(string i_VehicleModelName, string i_WheelsManufacturerName, string i_LicensePlate, int i_NumberOfWheels, float i_WheelsMaximumAirPressure)
+            : base(i_VehicleModelName, i_WheelsManufacturerName, i_LicensePlate, i_NumberOfWheels, i_WheelsMaximumAirPressure)
         {
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}", base.ToString());
         }
     }
 }

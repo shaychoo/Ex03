@@ -13,8 +13,35 @@ namespace Ex03.GarageManagementSystem.ConsoleUI
         public ConsoleManager()
         {
             Console.WriteLine("Welcome to Garage Manager!");
-            showMainMenu();
+            try
+            {
 
+
+
+                string owner = "Yossi";
+                string phoneNumber = "050-1234567";
+                VehicleCreation.eVehicleType vehicleType = VehicleCreation.eVehicleType.Car;
+                VehicleCreation.eEnergySourceType energySourceType = VehicleCreation.eEnergySourceType.Fuel;
+                float currentEnergyAmount = 40.0f;
+                string vehicleModelName = "KIA";
+                string wheelsManufacturerName = "Michelin";
+                string licensePlate = "12-345-67";
+                float currentAirPressure = 20.0f;
+
+                object[] specificCarParams = new object[2];
+                specificCarParams[(int)VehicleCreation.eCarSpecificParams.CarColor] = Enums.eCarColor.Red;
+                specificCarParams[(int)VehicleCreation.eCarSpecificParams.NumberOfDoors] = Enums.eNumberOfDoors.Four;
+
+                r_GarageManager.EnterVehicleToGarage(owner, phoneNumber, vehicleType, energySourceType,
+                    currentEnergyAmount,
+                    vehicleModelName, wheelsManufacturerName, licensePlate, currentAirPressure, specificCarParams);
+            }
+            catch (Exception e) 
+            {
+
+                writeErrorMessage(e.Message);
+            }
+            showMainMenu();
         }
 
         private void showMainMenu()
@@ -65,6 +92,7 @@ Press q to exit
                     case eMainAction.Recharge:
                         break;
                     case eMainAction.ShowDetails:
+                        Console.WriteLine(r_GarageManager.GetVehiclesDetails());
                         break;
                     default:
                         inputIsValid = false;
@@ -82,97 +110,176 @@ Press q to exit
         {
             try
             {
-                string ownerName = getOwnerName();
-                string phoneNumber = ""; //getOwnerPhoneNumber();
-                VehicleCreation.eVehicleType vehicleType = getVehicleType();
-                VehicleCreation.eEnergySourceType energySourceType = getEneragySourceType();
-                float currentEnergyAmount = getCurrentEnergyAmount();
-                string modelName = "KIA";
-                string licensePlate = "1h-458-67";
-                object[] specificCarParams = new object[2];
-                specificCarParams[(int)VehicleCreation.eCarSpecificParams.CarColor] = Enums.eCarColor.Red;
-                specificCarParams[(int)VehicleCreation.eCarSpecificParams.NumberOfDoors] = Enums.eNumberOfDoors.Four;
+                string messageToUser, ownerName, phoneNumber, vehicleModelName, wheelsManufacturerName, licensePlate;
+                float currentEnergyAmount, currentAirPressure;
 
+                messageToUser = "Enter owner name:";
+                ownerName = getSimpleStringFromUser(messageToUser);
+
+                messageToUser = "Enter phone number (In format XXX-XXXXXXX):";
+                phoneNumber = getOwnerPhoneNumber(messageToUser);
+                
+                messageToUser = "Select vehicle type:";
+                VehicleCreation.eVehicleType vehicleType = getEnumValueFromUserByType<VehicleCreation.eVehicleType>(messageToUser);
+                
+                messageToUser = "Select energy source type:";
+                VehicleCreation.eEnergySourceType energySourceType = getEnumValueFromUserByType<VehicleCreation.eEnergySourceType>(messageToUser);
+                
+                messageToUser = string.Format("Enter {0} current energy amount:", energySourceType.ToString());
+                currentEnergyAmount = getFloatUserInput(messageToUser);
+                
+                messageToUser = "Enter vehicle model name:";
+                vehicleModelName = getSimpleStringFromUser(messageToUser);
+
+                messageToUser = "Enter wheels manufacturer name:";
+                wheelsManufacturerName = getSimpleStringFromUser(messageToUser); 
+
+                messageToUser = "Enter license plate (In format XX-XXX-XX):";
+                licensePlate = getVehicleLicensePlate(messageToUser);
+
+                messageToUser = "Enter current air pressure:";
+                currentAirPressure = getFloatUserInput(messageToUser);
+                
+                object[] specificVehicleParams = getSpecificVehicleParams(vehicleType);
+                
                 r_GarageManager.EnterVehicleToGarage(ownerName, phoneNumber, vehicleType, energySourceType,
-                    currentEnergyAmount, modelName, licensePlate,
-                    specificCarParams);
+                    currentEnergyAmount, vehicleModelName, wheelsManufacturerName, licensePlate,currentAirPressure,
+                    specificVehicleParams);
             }
-            catch (Exception iException)
+            catch (Exception i_Exception)
             {
-                writeErrorMessage(iException.Message);
+                writeErrorMessage(i_Exception.Message);
             }
         }
 
-        private float getCurrentEnergyAmount()
+        private object[] getSpecificVehicleParams(VehicleCreation.eVehicleType i_VehicleType)
         {
-            throw new NotImplementedException();
+            object[] specificVehicleParams = null;
+            string messasgeToUser;
+
+            switch (i_VehicleType)
+            {
+                case VehicleCreation.eVehicleType.Car:
+                    specificVehicleParams =
+                        new object[Enum.GetValues(typeof(VehicleCreation.eCarSpecificParams)).Length];
+                    messasgeToUser = "Select car color:";
+                    specificVehicleParams[(int)VehicleCreation.eCarSpecificParams.CarColor] =
+                        getEnumValueFromUserByType<Enums.eCarColor>(messasgeToUser);
+                    messasgeToUser = "Select car number of doors:";
+                    specificVehicleParams[(int)VehicleCreation.eCarSpecificParams.NumberOfDoors] =
+                        getEnumValueFromUserByType<Enums.eNumberOfDoors>(messasgeToUser);
+
+                    break;
+                case VehicleCreation.eVehicleType.Motorcycle:
+                    specificVehicleParams =
+                        new object[Enum.GetValues(typeof(VehicleCreation.eMotorcycelSpecificParams)).Length];
+                    messasgeToUser = "Select motorcycle license type:";
+                    specificVehicleParams[(int)VehicleCreation.eMotorcycelSpecificParams.LicenseType] =
+                        getEnumValueFromUserByType<Enums.eLicenseType>(messasgeToUser);
+
+                    messasgeToUser = "Select motorcycle engine volume:";
+                    specificVehicleParams[(int)VehicleCreation.eMotorcycelSpecificParams.EngineVolume] =
+                        getIntUserInput(messasgeToUser);
+                    break;
+                case VehicleCreation.eVehicleType.Truck:
+                    break;
+            }
+            return specificVehicleParams;
         }
 
-        private VehicleCreation.eEnergySourceType getEneragySourceType()
+        private int getIntUserInput(string i_MessageToUser)
         {
-            int selectedEneragySourceType;
+            int userInput;
             bool inputIsValid = true;
+            do
+            {
+                inputIsValid = int.TryParse(getSimpleStringFromUser(i_MessageToUser), out userInput);
+            } while (!inputIsValid);
+            return userInput;
+        }
+
+        private string getVehicleLicensePlate(string i_MessageToUser)
+        {
+            string licensePlate = string.Empty;
+            bool inputIsValid = true;
+            do
+            {
+                try
+                {
+                    licensePlate = getSimpleStringFromUser(i_MessageToUser);
+                    Helpers.CheckLicensePlateFormat(licensePlate);
+                    inputIsValid = true;
+                }
+                catch (FormatException i_FormatException)
+                {
+                    writeErrorMessage(i_FormatException.Message);
+                    inputIsValid = false;
+                }
+            } while (!inputIsValid);
+            return licensePlate;
+        }
+
+        private float getFloatUserInput(string i_MessageToUser)
+        {
+            float userInput;
+            bool inputIsValid = true;
+            do
+            {
+                inputIsValid = float.TryParse(getSimpleStringFromUser(i_MessageToUser), out userInput);
+            } while (!inputIsValid);
+            return userInput;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"> T is suppose to be Enum</typeparam>
+        /// <returns></returns>
+        private T getEnumValueFromUserByType<T>(string i_MessageToUser)
+        {
+            int selectedValue;
+            string userInput;
+            bool inputIsValid = true;
+            Array valuesArray = Enum.GetValues(typeof(T));
+            StringBuilder optionsToSelect = new StringBuilder();
+
+            for (int i = 0 ; i < valuesArray.Length ; i++)
+            {
+                optionsToSelect.Append(string.Format("{0}. {1}{2}", i + 1, valuesArray.GetValue(i), Environment.NewLine));
+            }
 
             do
             {
-                Console.WriteLine(@"
-Select energy source type:
-1. Fuel
-2. Electricity");
-                inputIsValid = int.TryParse(Console.ReadLine(), out selectedEneragySourceType)
-                               && selectedEneragySourceType > 0
-                               && selectedEneragySourceType < 2;
+                userInput = getSimpleStringFromUser(string.Format(@"
+{0}
+{1}",i_MessageToUser, optionsToSelect));
+                inputIsValid = int.TryParse(userInput, out selectedValue)
+                           && selectedValue > 0
+                           && selectedValue < valuesArray.Length + 1;
                 if (!inputIsValid)
                 {
                     writeInputIsNotValidErrorMessage();
                 }
             } while (!inputIsValid);
 
-            return (VehicleCreation.eEnergySourceType)selectedEneragySourceType;
+            return (T)valuesArray.GetValue(selectedValue - 1);
         }
 
-        private VehicleCreation.eVehicleType getVehicleType()
+        private string getSimpleStringFromUser(string i_MessageToUser)
         {
-            int selectedVehicleType;
-            bool inputIsValid = true;
-
-            do
-            {
-                Console.WriteLine(@"
-Select vehicle type:
-1. Car
-2. Motorcycle
-3. Truck");
-                inputIsValid = int.TryParse(Console.ReadLine(), out selectedVehicleType)
-                               && selectedVehicleType > 0
-                               && selectedVehicleType < 3;
-                if (!inputIsValid)
-                {
-                    writeInputIsNotValidErrorMessage();
-                }
-            } while (!inputIsValid);
-
-            return (VehicleCreation.eVehicleType)selectedVehicleType;
-        }
-
-
-
-        private string getOwnerName()
-        {
-            Console.WriteLine("Enter vehicle owner name:");
+            Console.WriteLine(i_MessageToUser);
             return Console.ReadLine();
         }
 
-        private string getOwnerPhoneNumber()
+        private string getOwnerPhoneNumber(string i_MessageToUser)
         {
             string phoneNumber = string.Empty;
             bool inputIsValid = true;
             do
             {
-                Console.WriteLine("Enter phone number (In format XXX-XXXXXXX)");
                 try
                 {
-                    phoneNumber = Console.ReadLine();
+                    phoneNumber = getSimpleStringFromUser(i_MessageToUser);
                     Helpers.CheckPhoneFormat(phoneNumber);
                     inputIsValid = true;
                 }

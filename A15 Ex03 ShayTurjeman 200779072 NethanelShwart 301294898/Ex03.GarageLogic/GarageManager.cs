@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Ex03.GarageLogic.BaseEntities;
 using Ex03.GarageLogic.EnergiesFillingInfo;
 using Ex03.GarageLogic.EnergySources;
@@ -20,30 +21,35 @@ namespace Ex03.GarageLogic
         /// <param name="i_VehicleType"></param>
         /// <param name="i_EnergySourceType"></param>
         /// <param name="i_CurrentEnergyAmount"></param>
-        /// <param name="i_ModelName"></param>
+        /// <param name="i_VehicleModelName"></param>
+        /// <param name="i_WheelsManufacturerName"></param>
         /// <param name="i_LicensePlate"></param>
+        /// <param name="i_CurrentAirPressure"></param>
         /// <param name="i_SpecificVehicleParams">used in case of extra params thats relevant to specific vehicle type (see example)</param>
         /// <example>
         /// 
         /// GarageManager garageManager = new GarageManager();
         /// 
         /// string owner = "Yossi";
-        /// string phoneNumber = "050-123456789";
+        /// string phoneNumber = "050-1234567";
         /// VehicleCreation.eVehicleType vehicleType =VehicleCreation.eVehicleType.Car;
         /// VehicleCreation.eEnergySourceType energySourceType = VehicleCreation.eEnergySourceType.Fuel;
         /// float currentEnergyAmount = 40.0f;
-        /// string modelName = "KIA";
+        /// string vehicleModelName = "KIA";
+        /// string wheelsManufacturerName = "Michelin";
         /// string licensePlate = "12-345-67";
+        /// float currentAirPressure = 20.0f;
+        /// 
         /// object[] specificCarParams  = new object[2];
         /// specificCarParams[(int)VehicleCreation.eCarSpecificParams.CarColor] = Enums.eCarColor.Red;
         /// specificCarParams[(int)VehicleCreation.eCarSpecificParams.NumberOfDoors] = Enums.eNumberOfDoors.Four;
         /// 
-        /// garageManager.EnterNewCar(owner,phoneNumber, vehicleType, energySourceType, currentEnergyAmount, 
-        ///                             modelName, licensePlate, specificCarParams);
+        /// garageManager.EnterVehicleToGarage(owner,phoneNumber, vehicleType, energySourceType, currentEnergyAmount, 
+        ///                             vehicleModelName, wheelsManufacturerName, licensePlate, currentAirPressure, specificCarParams);
         /// </example>
         public void EnterVehicleToGarage(string i_OwnerName, string i_OwnerPhone, VehicleCreation.eVehicleType i_VehicleType,
             VehicleCreation.eEnergySourceType i_EnergySourceType,
-            float i_CurrentEnergyAmount, string i_ModelName, string i_LicensePlate,
+            float i_CurrentEnergyAmount, string i_VehicleModelName, string i_WheelsManufacturerName, string i_LicensePlate, float i_CurrentAirPressure,
             params object[] i_SpecificVehicleParams)
         {
             if (!r_VehiclesDictionaryByLicensePlate.ContainsKey(i_LicensePlate))
@@ -52,15 +58,15 @@ namespace Ex03.GarageLogic
                 VehicleInGarageInfo newVehicleInGarageInfo = new VehicleInGarageInfo(i_OwnerName, i_OwnerPhone,
                         Enums.eStatusInGarage.InRepair);
                 Vehicle newVehicle = VehicleCreation.CreateNewVehicle(i_VehicleType,
-                    i_EnergySourceType, i_CurrentEnergyAmount, i_ModelName, i_LicensePlate,
+                    i_EnergySourceType, i_CurrentEnergyAmount, i_VehicleModelName, i_WheelsManufacturerName, i_LicensePlate, i_CurrentAirPressure,
                     i_SpecificVehicleParams);
-                r_VehiclesDictionaryByLicensePlate.Add(i_LicensePlate,newVehicle);
+                r_VehiclesDictionaryByLicensePlate.Add(i_LicensePlate, newVehicle);
                 r_VehiclesInGarageInfo.Add(newVehicle, newVehicleInGarageInfo);
             }
             else
             {
                 //existing vehicle
-                r_VehiclesInGarageInfo[r_VehiclesDictionaryByLicensePlate[i_LicensePlate]].Status =
+                r_VehiclesInGarageInfo[r_VehiclesDictionaryByLicensePlate[i_LicensePlate]].StatusInGarage =
                     Enums.eStatusInGarage.InRepair;
             }
         }
@@ -107,7 +113,7 @@ namespace Ex03.GarageLogic
         {
             Vehicle theVehicle = getVehicleInGarage(i_LicensePlate);
 
-            r_VehiclesInGarageInfo[theVehicle].Status = i_NewStatusInGarage;
+            r_VehiclesInGarageInfo[theVehicle].StatusInGarage = i_NewStatusInGarage;
         }
 
         public List<string> GetVehiclesLicensePlatesByStatussInGarage(Enums.eStatusInGarage i_StatussInGarage)
@@ -116,7 +122,7 @@ namespace Ex03.GarageLogic
 
             foreach (KeyValuePair<Vehicle, VehicleInGarageInfo> vehicleInGarageInfoKeyValuePair in r_VehiclesInGarageInfo)
             {
-                if ((i_StatussInGarage & vehicleInGarageInfoKeyValuePair.Value.Status) == vehicleInGarageInfoKeyValuePair.Value.Status)
+                if ((i_StatussInGarage & vehicleInGarageInfoKeyValuePair.Value.StatusInGarage) == vehicleInGarageInfoKeyValuePair.Value.StatusInGarage)
                 {
                     vehiclesLicensePlatesByStatussInGarage.Add(vehicleInGarageInfoKeyValuePair.Key.LicensePlate);
                 }
@@ -136,7 +142,7 @@ namespace Ex03.GarageLogic
             else
             {
                 theVehicle = r_VehiclesDictionaryByLicensePlate[i_LicensePlate];
-                if (r_VehiclesInGarageInfo[theVehicle].Status == Enums.eStatusInGarage.Paid)
+                if (r_VehiclesInGarageInfo[theVehicle].StatusInGarage == Enums.eStatusInGarage.Paid)
                 {
                     vehicleIsInGarage = false;
                 }
@@ -146,6 +152,31 @@ namespace Ex03.GarageLogic
                 throw new VehicleStateInGarageException(vehicleIsInGarage, i_LicensePlate);
             }
             return theVehicle;
+        }
+
+        public string GetVehiclesDetails()
+        {
+            string vehiclesDetails;
+            if (r_VehiclesDictionaryByLicensePlate.Count == 0)
+            {
+                return "There is no vehicles in the garage";
+            }
+            else
+            {
+                StringBuilder detailsBuilder = new StringBuilder();
+                foreach (Vehicle vehicle in r_VehiclesDictionaryByLicensePlate.Values)
+                {
+                    detailsBuilder.Append(string.Format(@"
+
+/*
+{0}
+{1}
+*/", r_VehiclesInGarageInfo[vehicle].ToString(), vehicle.ToString()));
+                }
+
+                vehiclesDetails = detailsBuilder.ToString();
+            }
+            return vehiclesDetails;
         }
     }
 }
