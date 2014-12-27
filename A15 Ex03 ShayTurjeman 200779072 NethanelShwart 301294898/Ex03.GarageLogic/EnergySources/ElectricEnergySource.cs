@@ -10,23 +10,22 @@ namespace Ex03.GarageLogic.EnergySources
     {
         private readonly ElectricityFillingInfo r_ElectricityFillingInfo;
 
-        public ElectricEnergySource(EnergyFillingInfo i_EnergyFillingInfo)
-            : base(i_EnergyFillingInfo)
+        public ElectricEnergySource(float i_CurrentEnergyAmount, EnergyFillingInfo i_EnergyFillingInfo)
+            : base(i_CurrentEnergyAmount, i_EnergyFillingInfo)
         {
-            ElectricityFillingInfo electricFillingInfo = r_EnergyFillingInfo as ElectricityFillingInfo;
+            r_ElectricityFillingInfo =
+                Helpers.StrongArgumentNeededTypeCheckAndCast<ElectricityFillingInfo>(i_EnergyFillingInfo);
+        }
 
-            if (electricFillingInfo == null)
-            {
-                throw new ArgumentException(
-                    "can't create ElectricEnergySource with a EnergyFillingInfo that is not ElectricityFillingInfo");
-            }
-            r_ElectricityFillingInfo = electricFillingInfo;
+        public ElectricityFillingInfo ElectricityFillingInfo
+        {
+            get { return r_ElectricityFillingInfo; }
         }
 
         public override void Fill(float i_Amount)
         {
             Helpers.AddingValueInRangeCheck(i_Amount, CurrentEnergyAmount, k_MinimumEnergyFillingValue,
-                r_ElectricityFillingInfo.MaximumAmount);
+                ElectricityFillingInfo.MaximumAmount);
             CurrentEnergyAmount += i_Amount;
         }
     }

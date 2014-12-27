@@ -30,7 +30,7 @@ namespace Ex03.GarageLogic
             Red,
         }
 
-        public enum eDoorsNumber
+        public enum eNumberOfDoors
         {
             Two,
             Three,

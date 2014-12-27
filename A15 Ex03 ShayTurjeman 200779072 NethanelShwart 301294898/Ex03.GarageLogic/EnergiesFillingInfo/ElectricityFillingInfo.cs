@@ -2,8 +2,12 @@
 
 namespace Ex03.GarageLogic.EnergiesFillingInfo
 {
-    public abstract class ElectricityFillingInfo : EnergyFillingInfo
+    public sealed class ElectricityFillingInfo : EnergyFillingInfo
     {
-        
+        public ElectricityFillingInfo( float i_MaximumEnergyFillingAmount)
+            : base(i_MaximumEnergyFillingAmount)
+        {
+            
+        }
     }
 }

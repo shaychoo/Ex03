@@ -11,17 +11,65 @@ namespace Ex03.GarageLogic
     {
         private readonly Dictionary<string, Vehicle> r_VehiclesDictionaryByLicensePlate = new Dictionary<string, Vehicle>();
         private readonly Dictionary<Vehicle, VehicleInGarageInfo> r_VehiclesInGarageInfo = new Dictionary<Vehicle, VehicleInGarageInfo>();
-        
-        public void EnterNewCar()
-        {
 
+        /// <summary>
+        /// sets the car status in garage to Enums.eStatusInGarage.InRepair
+        /// </summary>
+        /// <param name="i_OwnerName"></param>
+        /// <param name="i_OwnerPhone"></param>
+        /// <param name="i_VehicleType"></param>
+        /// <param name="i_EnergySourceType"></param>
+        /// <param name="i_CurrentEnergyAmount"></param>
+        /// <param name="i_ModelName"></param>
+        /// <param name="i_LicensePlate"></param>
+        /// <param name="i_SpecificVehicleParams">used in case of extra params thats relevant to specific vehicle type (see example)</param>
+        /// <example>
+        /// 
+        /// GarageManager garageManager = new GarageManager();
+        /// 
+        /// string owner = "Yossi";
+        /// string phoneNumber = "050-123456789";
+        /// VehicleCreation.eVehicleType vehicleType =VehicleCreation.eVehicleType.Car;
+        /// VehicleCreation.eEnergySourceType energySourceType = VehicleCreation.eEnergySourceType.Fuel;
+        /// float currentEnergyAmount = 40.0f;
+        /// string modelName = "KIA";
+        /// string licensePlate = "12-345-67";
+        /// object[] specificCarParams  = new object[2];
+        /// specificCarParams[(int)VehicleCreation.eCarSpecificParams.CarColor] = Enums.eCarColor.Red;
+        /// specificCarParams[(int)VehicleCreation.eCarSpecificParams.NumberOfDoors] = Enums.eNumberOfDoors.Four;
+        /// 
+        /// garageManager.EnterNewCar(owner,phoneNumber, vehicleType, energySourceType, currentEnergyAmount, 
+        ///                             modelName, licensePlate, specificCarParams);
+        /// </example>
+        public void EnterVehicleToGarage(string i_OwnerName, string i_OwnerPhone, VehicleCreation.eVehicleType i_VehicleType,
+            VehicleCreation.eEnergySourceType i_EnergySourceType,
+            float i_CurrentEnergyAmount, string i_ModelName, string i_LicensePlate,
+            params object[] i_SpecificVehicleParams)
+        {
+            if (!r_VehiclesDictionaryByLicensePlate.ContainsKey(i_LicensePlate))
+            {
+                //new vehicle
+                VehicleInGarageInfo newVehicleInGarageInfo = new VehicleInGarageInfo(i_OwnerName, i_OwnerPhone,
+                        Enums.eStatusInGarage.InRepair);
+                Vehicle newVehicle = VehicleCreation.CreateNewVehicle(i_VehicleType,
+                    i_EnergySourceType, i_CurrentEnergyAmount, i_ModelName, i_LicensePlate,
+                    i_SpecificVehicleParams);
+                r_VehiclesDictionaryByLicensePlate.Add(i_LicensePlate,newVehicle);
+                r_VehiclesInGarageInfo.Add(newVehicle, newVehicleInGarageInfo);
+            }
+            else
+            {
+                //existing vehicle
+                r_VehiclesInGarageInfo[r_VehiclesDictionaryByLicensePlate[i_LicensePlate]].Status =
+                    Enums.eStatusInGarage.InRepair;
+            }
         }
 
         public void RefillFuel(string i_LicensePlate, Enums.eFuelType i_FuelType, int i_Amount)
         {
             Vehicle theVehicle = getVehicleInGarage(i_LicensePlate);
             FuelEnergySource fuelEnergySource = theVehicle.EnergySource as FuelEnergySource;
-            
+
             if (fuelEnergySource == null)
             {
                 throw new ArgumentException("license plate doesn't belong to fuel vehicle");
@@ -49,8 +97,6 @@ namespace Ex03.GarageLogic
 
             theVehicle.FillEnergy(i_Amount);
         }
-
-        
 
         public void InflateWheelsToMaximum(string i_LicensePlate)
         {
@@ -81,18 +127,24 @@ namespace Ex03.GarageLogic
 
         private Vehicle getVehicleInGarage(string i_LicensePlate)
         {
+            bool vehicleIsInGarage = true;
+            Vehicle theVehicle = null;
             if (!r_VehiclesDictionaryByLicensePlate.ContainsKey(i_LicensePlate))
             {
-                throw new NotInGarageException("Vehicle is not found in the garage");
+                vehicleIsInGarage = false;
             }
-
-            Vehicle theVehicle = r_VehiclesDictionaryByLicensePlate[i_LicensePlate];
-
-            if (r_VehiclesInGarageInfo[theVehicle].Status == Enums.eStatusInGarage.Paid)
+            else
             {
-                throw new NotInGarageException("Vehicle already left the garage");
+                theVehicle = r_VehiclesDictionaryByLicensePlate[i_LicensePlate];
+                if (r_VehiclesInGarageInfo[theVehicle].Status == Enums.eStatusInGarage.Paid)
+                {
+                    vehicleIsInGarage = false;
+                }
             }
-
+            if (!vehicleIsInGarage)
+            {
+                throw new VehicleStateInGarageException(vehicleIsInGarage, i_LicensePlate);
+            }
             return theVehicle;
         }
     }

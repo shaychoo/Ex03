@@ -4,26 +4,22 @@ namespace Ex03.GarageLogic.BaseEntities
 {
     public abstract class Vehicle
     {
-        protected abstract int MumberOfWheels { get; }
-
-        protected abstract float WheelsMaximumAirPressure { get; }
-
-        public Vehicle(EnergySource i_EnergySources)
+        public Vehicle(VehicleInfo i_VehicleInfo,EnergySource i_EnergySource)
         {
-            EnergySource = i_EnergySources;
+            VehicleInfo = i_VehicleInfo;
+            EnergySource = i_EnergySource;
         }
 
-        public string ModelName { get; set; }
-
-        public string LicensePlate { get; set; }
-
-        
+        protected VehicleInfo VehicleInfo { get; set; }
 
         public List<Wheel> Wheels { get; set; }
 
         public EnergySource EnergySource { get; private set; }
 
-        public float RemainingEnergyPercentage { get { return EnergySource.CurrentEnergyAmountInPercentage; }}
+        public float RemainingEnergyPercentage
+        {
+            get { return EnergySource.CurrentEnergyAmountInPercentage; }
+        }
 
         public void InflateWheelsToMaximum()
         {
@@ -38,5 +34,7 @@ namespace Ex03.GarageLogic.BaseEntities
         {
             EnergySource.Fill(i_Amount);
         }
+
+        public string LicensePlate { get { return VehicleInfo.LicensePlate; } }
     }
 }

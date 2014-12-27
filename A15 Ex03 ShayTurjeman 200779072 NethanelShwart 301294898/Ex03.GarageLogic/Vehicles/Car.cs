@@ -2,30 +2,22 @@
 using System.Collections.Generic;
 using System.Text;
 using Ex03.GarageLogic.BaseEntities;
+using Ex03.GarageLogic.VehiclesInfo;
 
 namespace Ex03.GarageLogic.Vehicles
 {
     public class Car : Vehicle
     {
-        public Car(EnergySource i_EnergySources, Enums.eCarColor i_CarColor, Enums.eDoorsNumber i_NumberOfDoors)
-            : base(i_EnergySources)
+        private readonly CarInfo r_CarInfo;
+
+        public Car(VehicleInfo i_VehicleInfo, EnergySource i_EnergySource) : base(i_VehicleInfo, i_EnergySource)
         {
-            CarColor = i_CarColor;
-            NumberOfDoors = i_NumberOfDoors;
+            r_CarInfo = Helpers.StrongArgumentNeededTypeCheckAndCast<CarInfo>(i_VehicleInfo);
         }
 
-        public Enums.eCarColor CarColor { get; set; }
-
-        public Enums.eDoorsNumber NumberOfDoors { get; set; }
-
-        protected override int MumberOfWheels
+        public CarInfo CarInfo
         {
-            get { return 4; }
-        }
-
-        protected override float WheelsMaximumAirPressure
-        {
-            get { return 29.0f; }
+            get { return r_CarInfo; }
         }
     }
 }

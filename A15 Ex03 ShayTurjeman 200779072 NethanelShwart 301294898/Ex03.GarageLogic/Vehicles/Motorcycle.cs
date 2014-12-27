@@ -2,30 +2,23 @@
 using System.Collections.Generic;
 using System.Text;
 using Ex03.GarageLogic.BaseEntities;
+using Ex03.GarageLogic.VehiclesInfo;
 
 namespace Ex03.GarageLogic.Vehicles
 {
     public class Motorcycle : Vehicle
     {
-        public Motorcycle(EnergySource i_EnergySources, Enums.eLicenseType i_LicenseType, int i_EngineVolume)
-            : base(i_EnergySources)
+        private readonly MotorcycleInfo r_MotorcycleInfo;
+        public Motorcycle(VehicleInfo i_VehicleInfo, EnergySource i_EnergySource)
+            : base(i_VehicleInfo, i_EnergySource)
         {
-            LicenseType = i_LicenseType;
-            EngineVolume = i_EngineVolume;
+            r_MotorcycleInfo = Helpers.StrongArgumentNeededTypeCheckAndCast<MotorcycleInfo>(i_VehicleInfo);
         }
 
-        public Enums.eLicenseType LicenseType { get; set; }
-
-        public int EngineVolume { get; set; }
-
-        protected override int MumberOfWheels
+        public MotorcycleInfo MotorcycleInfo
         {
-            get { return 2; }
+            get { return r_MotorcycleInfo; }
         }
 
-        protected override float WheelsMaximumAirPressure
-        {
-            get { return 30.0f; }
-        }
     }
 }
