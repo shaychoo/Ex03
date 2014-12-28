@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Ex03.GarageLogic.BaseEntities;
+﻿using Ex03.GarageLogic.BaseEntities;
 using Ex03.GarageLogic.EnergiesFillingInfo;
 
 namespace Ex03.GarageLogic.EnergySources

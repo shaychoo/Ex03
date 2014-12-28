@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ex03.GarageLogic.Exceptions
 {
@@ -11,8 +9,10 @@ namespace Ex03.GarageLogic.Exceptions
             IsInGarage = i_IsInGarage;
             LicensePlate = i_LicensePlate;
         }
+
         public bool IsInGarage { get; set; }
         public string LicensePlate { get; set; }
+
         public override string Message
         {
             get

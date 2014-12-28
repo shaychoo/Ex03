@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
 using Ex03.GarageLogic;
 
 namespace Ex03.GarageManagementSystem.ConsoleUI
@@ -13,31 +12,6 @@ namespace Ex03.GarageManagementSystem.ConsoleUI
         public ConsoleManager()
         {
             Console.WriteLine("Welcome to Garage Manager!");
-            try
-            {
-                string owner = "Yossi";
-                string phoneNumber = "050-1234567";
-                VehicleCreation.eVehicleType vehicleType = VehicleCreation.eVehicleType.Car;
-                VehicleCreation.eEnergySourceType energySourceType = VehicleCreation.eEnergySourceType.Electricity;
-                float currentEnergyAmount = 1.0f;
-                string vehicleModelName = "KIA";
-                string wheelsManufacturerName = "Michelin";
-                string licensePlate = "12-345-67";
-                float currentAirPressure = 20.0f;
-
-                object[] specificCarParams = new object[2];
-                specificCarParams[(int)VehicleCreation.eCarSpecificParams.CarColor] = Enums.eCarColor.Red;
-                specificCarParams[(int)VehicleCreation.eCarSpecificParams.NumberOfDoors] = Enums.eNumberOfDoors.Four;
-
-                r_GarageManager.EnterVehicleToGarage(owner, phoneNumber, vehicleType, energySourceType,
-                    currentEnergyAmount,
-                    vehicleModelName, wheelsManufacturerName, licensePlate, currentAirPressure, specificCarParams);
-            }
-            catch (Exception e)
-            {
-
-                writeErrorMessage(e.Message);
-            }
             showMainMenu();
         }
 
@@ -192,7 +166,7 @@ Press q to exit
             else
             {
                 StringBuilder licensePlatesBuilder = new StringBuilder();
-                foreach (var licensePlate in licensePlates)
+                foreach (string licensePlate in licensePlates)
                 {
                     licensePlatesBuilder.AppendLine(licensePlate);
                 }
@@ -226,15 +200,12 @@ Press q to exit
                         neededStatuss.Clear();
                         break;
                     }
-                    else
-                    {
-                        neededStatuss.Add(value);
-                    }
+                    neededStatuss.Add(value);
                 }
             } while (!inputIsValid);
 
             Enums.eStatusInGarage neededState = (Enums.eStatusInGarage)statussInGarage.GetValue(neededStatuss[0] - 1);
-            for (int i = 1; i < neededStatuss.Count; i++)
+            for (int i = 1 ; i < neededStatuss.Count ; i++)
             {
                 neededState = neededState | (Enums.eStatusInGarage)statussInGarage.GetValue(neededStatuss[i] - 1);
             }
@@ -255,7 +226,7 @@ Press q to exit
             {
                 StringBuilder vehiclesDetailsStringBuilder = new StringBuilder();
                 string dividingLine = "*************************************************************";
-                foreach (var vehicleDetails in vehiclesDetails)
+                foreach (string vehicleDetails in vehiclesDetails)
                 {
                     vehiclesDetailsStringBuilder.Append(string.Format(@"
 {0}
@@ -283,12 +254,14 @@ Press q to exit
                 phoneNumber = getOwnerPhoneNumber(messageToUser);
 
                 messageToUser = "Select vehicle type:";
-                VehicleCreation.eVehicleType vehicleType = getEnumValueFromUserByType<VehicleCreation.eVehicleType>(messageToUser);
+                VehicleCreation.eVehicleType vehicleType =
+                    getEnumValueFromUserByType<VehicleCreation.eVehicleType>(messageToUser);
 
                 messageToUser = "Select energy source type:";
-                VehicleCreation.eEnergySourceType energySourceType = getEnumValueFromUserByType<VehicleCreation.eEnergySourceType>(messageToUser);
+                VehicleCreation.eEnergySourceType energySourceType =
+                    getEnumValueFromUserByType<VehicleCreation.eEnergySourceType>(messageToUser);
 
-                messageToUser = string.Format("Enter {0} current energy amount:", energySourceType.ToString());
+                messageToUser = string.Format("Enter {0} current energy amount:", energySourceType);
                 currentEnergyAmount = getFloatUserInput(messageToUser);
 
                 messageToUser = "Enter vehicle model name:";
@@ -309,7 +282,7 @@ Press q to exit
                     currentEnergyAmount, vehicleModelName, wheelsManufacturerName, licensePlate, currentAirPressure,
                     specificVehicleParams);
 
-                writeSuccessMessage(string.Format("New {0} entered with license plate: {1}!", vehicleType.ToString(), licensePlate));
+                writeSuccessMessage(string.Format("New {0} entered with license plate: {1}!", vehicleType, licensePlate));
             }
             catch (Exception i_Exception)
             {
@@ -396,7 +369,6 @@ Press q to exit
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <typeparam name="T"> T is suppose to be Enum</typeparam>
         /// <returns></returns>
@@ -414,8 +386,8 @@ Press q to exit
 {0}
 {1}", i_MessageToUser, optionsToSelect));
                 inputIsValid = int.TryParse(userInput, out selectedValue)
-                           && selectedValue > 0
-                           && selectedValue < valuesArray.Length + 1;
+                               && selectedValue > 0
+                               && selectedValue < valuesArray.Length + 1;
                 if (!inputIsValid)
                 {
                     writeInputIsNotValidErrorMessage();
@@ -430,9 +402,10 @@ Press q to exit
             Array valuesArray = Enum.GetValues(typeof(T));
             StringBuilder optionsToSelectBuilder = new StringBuilder();
 
-            for (int i = 0; i < valuesArray.Length; i++)
+            for (int i = 0 ; i < valuesArray.Length ; i++)
             {
-                optionsToSelectBuilder.Append(string.Format("{0}. {1}{2}", i + 1, valuesArray.GetValue(i), Environment.NewLine));
+                optionsToSelectBuilder.Append(string.Format("{0}. {1}{2}", i + 1, valuesArray.GetValue(i),
+                    Environment.NewLine));
             }
 
             optionsToSelect = optionsToSelectBuilder.ToString();

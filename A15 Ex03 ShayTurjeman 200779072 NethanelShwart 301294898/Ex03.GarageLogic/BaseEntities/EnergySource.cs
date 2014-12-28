@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ex03.GarageLogic.BaseEntities
+﻿namespace Ex03.GarageLogic.BaseEntities
 {
     public abstract class EnergySource
     {
-        private readonly EnergyFillingInfo r_EnergyFillingInfo;
-
         protected const float k_MinimumEnergyFillingValue = 0.0f;
+        private readonly EnergyFillingInfo r_EnergyFillingInfo;
 
         public EnergySource(float i_CurrentEnergyAmount, EnergyFillingInfo i_EnergyFillingInfo)
         {
@@ -18,10 +13,8 @@ namespace Ex03.GarageLogic.BaseEntities
             // check that started energy amount is in range by the energy filling info
             string valueName = "Current energy amount";
             Helpers.IsPossibleAddingValueInRangeCheck(0, CurrentEnergyAmount, k_MinimumEnergyFillingValue,
-               r_EnergyFillingInfo.MaximumAmount, valueName);
+                r_EnergyFillingInfo.MaximumAmount, valueName);
         }
-
-        public abstract void Fill(float i_Amount);
 
         public float CurrentEnergyAmount { get; protected set; }
 
@@ -30,9 +23,12 @@ namespace Ex03.GarageLogic.BaseEntities
             get { return (100.0f * CurrentEnergyAmount) / r_EnergyFillingInfo.MaximumAmount; }
         }
 
+        public abstract void Fill(float i_Amount);
+
         public override string ToString()
         {
-            return string.Format(@"Energy filling info: {0}, Current energy amount: {1}", r_EnergyFillingInfo.ToString(), CurrentEnergyAmount);
+            return string.Format(@"Energy filling info: {0}, Current energy amount: {1}", r_EnergyFillingInfo,
+                CurrentEnergyAmount);
         }
     }
 }

@@ -27,9 +27,14 @@ namespace Ex03.GarageLogic.BaseEntities
             get { return EnergySource.CurrentEnergyAmountInPercentage; }
         }
 
+        public string LicensePlate
+        {
+            get { return VehicleInfo.LicensePlate; }
+        }
+
         public void InflateWheelsToMaximum()
         {
-            foreach (var wheel in Wheels)
+            foreach (Wheel wheel in Wheels)
             {
                 float amountToInflate = wheel.MaximumAirPressure - wheel.CurrentAirPressure;
                 wheel.Inflate(amountToInflate);
@@ -41,18 +46,13 @@ namespace Ex03.GarageLogic.BaseEntities
             EnergySource.Fill(i_Amount);
         }
 
-        public string LicensePlate
-        {
-            get { return VehicleInfo.LicensePlate; }
-        }
-
         public override string ToString()
         {
             return
                 string.Format(
                     "License plate: {0}, Remaining energy percentage: {1}. Vehicle info: {2}. Wheels info: {3}. Energy source info: {4}.",
-                    LicensePlate, RemainingEnergyPercentage, VehicleInfo.ToString(), Wheels[0].ToString(),
-                    EnergySource.ToString());
+                    LicensePlate, RemainingEnergyPercentage, VehicleInfo, Wheels[0],
+                    EnergySource);
         }
     }
 }

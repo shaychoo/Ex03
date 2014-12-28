@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Ex03.GarageLogic.BaseEntities;
-using Ex03.GarageLogic.EnergiesFillingInfo;
 using Ex03.GarageLogic.EnergySources;
 using Ex03.GarageLogic.Exceptions;
 
@@ -17,7 +15,7 @@ namespace Ex03.GarageLogic
             new Dictionary<Vehicle, VehicleInGarageInfo>();
 
         /// <summary>
-        /// sets the car status in garage to Enums.eStatusInGarage.InRepair
+        ///     sets the car status in garage to Enums.eStatusInGarage.InRepair
         /// </summary>
         /// <param name="i_OwnerName"></param>
         /// <param name="i_OwnerPhone"></param>
@@ -28,27 +26,26 @@ namespace Ex03.GarageLogic
         /// <param name="i_WheelsManufacturerName"></param>
         /// <param name="i_LicensePlate"></param>
         /// <param name="i_CurrentAirPressure"></param>
-        /// <param name="i_SpecificVehicleParams">used in case of extra params thats relevant to specific vehicle type (see example)</param>
+        /// <param name="i_SpecificVehicleParams">
+        ///     used in case of extra params thats relevant to specific vehicle type (see
+        ///     example)
+        /// </param>
         /// <example>
-        /// 
-        /// GarageManager garageManager = new GarageManager();
-        /// 
-        /// string owner = "Yossi";
-        /// string phoneNumber = "050-1234567";
-        /// VehicleCreation.eVehicleType vehicleType =VehicleCreation.eVehicleType.Car;
-        /// VehicleCreation.eEnergySourceType energySourceType = VehicleCreation.eEnergySourceType.Fuel;
-        /// float currentEnergyAmount = 40.0f;
-        /// string vehicleModelName = "KIA";
-        /// string wheelsManufacturerName = "Michelin";
-        /// string licensePlate = "12-345-67";
-        /// float currentAirPressure = 20.0f;
-        /// 
-        /// object[] specificCarParams  = new object[2];
-        /// specificCarParams[(int)VehicleCreation.eCarSpecificParams.CarColor] = Enums.eCarColor.Red;
-        /// specificCarParams[(int)VehicleCreation.eCarSpecificParams.NumberOfDoors] = Enums.eNumberOfDoors.Four;
-        /// 
-        /// garageManager.EnterVehicleToGarage(owner,phoneNumber, vehicleType, energySourceType, currentEnergyAmount, 
-        ///                             vehicleModelName, wheelsManufacturerName, licensePlate, currentAirPressure, specificCarParams);
+        ///     GarageManager garageManager = new GarageManager();
+        ///     string owner = "Yossi";
+        ///     string phoneNumber = "050-1234567";
+        ///     VehicleCreation.eVehicleType vehicleType =VehicleCreation.eVehicleType.Car;
+        ///     VehicleCreation.eEnergySourceType energySourceType = VehicleCreation.eEnergySourceType.Fuel;
+        ///     float currentEnergyAmount = 40.0f;
+        ///     string vehicleModelName = "KIA";
+        ///     string wheelsManufacturerName = "Michelin";
+        ///     string licensePlate = "12-345-67";
+        ///     float currentAirPressure = 20.0f;
+        ///     object[] specificCarParams  = new object[2];
+        ///     specificCarParams[(int)VehicleCreation.eCarSpecificParams.CarColor] = Enums.eCarColor.Red;
+        ///     specificCarParams[(int)VehicleCreation.eCarSpecificParams.NumberOfDoors] = Enums.eNumberOfDoors.Four;
+        ///     garageManager.EnterVehicleToGarage(owner,phoneNumber, vehicleType, energySourceType, currentEnergyAmount,
+        ///     vehicleModelName, wheelsManufacturerName, licensePlate, currentAirPressure, specificCarParams);
         /// </example>
         public void EnterVehicleToGarage(string i_OwnerName, string i_OwnerPhone,
             VehicleCreation.eVehicleType i_VehicleType,
@@ -168,7 +165,7 @@ namespace Ex03.GarageLogic
 
             foreach (KeyValuePair<Vehicle, VehicleInGarageInfo> vehicle in r_VehiclesInGarageInfo)
             {
-                vehiclesDetails.Add(string.Format(@"{0},{1}", vehicle.Value.ToString(), vehicle.Key.ToString()));
+                vehiclesDetails.Add(string.Format(@"{0},{1}", vehicle.Value, vehicle.Key));
             }
             return vehiclesDetails;
         }

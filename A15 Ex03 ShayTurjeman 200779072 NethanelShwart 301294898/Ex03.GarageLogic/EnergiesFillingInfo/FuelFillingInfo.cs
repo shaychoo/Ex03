@@ -12,7 +12,10 @@ namespace Ex03.GarageLogic.EnergiesFillingInfo
             r_FuelType = i_FuelType;
         }
 
-        public Enums.eFuelType FuelType { get { return r_FuelType; } }
+        public Enums.eFuelType FuelType
+        {
+            get { return r_FuelType; }
+        }
 
         public override string ToString()
         {

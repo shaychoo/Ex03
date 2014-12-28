@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-
-namespace Ex03.GarageManagementSystem.ConsoleUI
+﻿namespace Ex03.GarageManagementSystem.ConsoleUI
 {
-    class Program
+    internal class Program
     {
         public static void Main()
         {
-            ConsoleManager consoleManager =new ConsoleManager();
+            ConsoleManager consoleManager = new ConsoleManager();
         }
     }
 }

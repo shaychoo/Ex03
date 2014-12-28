@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Ex03.GarageLogic.BaseEntities;
 using Ex03.GarageLogic.Exceptions;
 
 namespace Ex03.GarageLogic
@@ -18,7 +15,7 @@ namespace Ex03.GarageLogic
                 throw new ValueOutOfRangeException(i_MinimumValue, maxAllowedAddingValue,
                     string.Format("{0} value is less then minimum allowed value", i_ValueName));
             }
-            if (Math.Round(i_ValueToAdd,1) > Math.Round(maxAllowedAddingValue,1))
+            if (Math.Round(i_ValueToAdd, 1) > Math.Round(maxAllowedAddingValue, 1))
             {
                 throw new ValueOutOfRangeException(i_ValueToAdd, maxAllowedAddingValue,
                     string.Format("{0} value is more then maximum allowed value", i_ValueName));
@@ -26,7 +23,7 @@ namespace Ex03.GarageLogic
         }
 
         /// <summary>
-        /// Throws ArgumentException when given object is not in needed type
+        ///     Throws ArgumentException when given object is not in needed type
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="i_Argument"></param>
@@ -45,8 +42,8 @@ namespace Ex03.GarageLogic
         }
 
         /// <summary>
-        /// expected formats (after spaces removing):
-        /// XXX-XXXXXXX (3 digits - 7 digits) = 11 chars
+        ///     expected formats (after spaces removing):
+        ///     XXX-XXXXXXX (3 digits - 7 digits) = 11 chars
         /// </summary>
         /// <param name="i_OwnerPhone"></param>
         public static void CheckPhoneFormat(string i_OwnerPhone)
@@ -57,7 +54,7 @@ namespace Ex03.GarageLogic
 
             bool isInCorrectFormat = true;
 
-            for (int i = 0; i < i_OwnerPhone.Length; i++)
+            for (int i = 0 ; i < i_OwnerPhone.Length ; i++)
             {
                 if (i != 3)
                 {
@@ -80,8 +77,8 @@ namespace Ex03.GarageLogic
         }
 
         /// <summary>
-        /// expected formats (after spaces removing):
-        /// XX-XXX-XX (2 digits/letters - 3 digits/letters - 2 digits/letters) = 9 chars
+        ///     expected formats (after spaces removing):
+        ///     XX-XXX-XX (2 digits/letters - 3 digits/letters - 2 digits/letters) = 9 chars
         /// </summary>
         /// <param name="i_LicensePlate"></param>
         public static void CheckLicensePlateFormat(string i_LicensePlate)
@@ -92,7 +89,7 @@ namespace Ex03.GarageLogic
 
             bool isInCorrectFormat = true;
 
-            for (int i = 0; i < i_LicensePlate.Length; i++)
+            for (int i = 0 ; i < i_LicensePlate.Length ; i++)
             {
                 if (i != 2 && i != 6)
                 {

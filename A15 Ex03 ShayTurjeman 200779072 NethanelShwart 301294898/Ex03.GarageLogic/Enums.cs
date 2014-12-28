@@ -1,11 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ex03.GarageLogic
 {
     public class Enums
     {
+        public enum eCarColor
+        {
+            White = 0,
+            Green = 1,
+            Blue = 2,
+            Red = 3,
+        }
+
         public enum eFuelType
         {
             Octan98,
@@ -14,20 +20,12 @@ namespace Ex03.GarageLogic
             Soler
         }
 
-        [Flags]
-        public enum eStatusInGarage
+        public enum eLicenseType
         {
-            InRepair = 1,
-            Repaired = 2,
-            Paid = 4,
-        }
-
-        public enum eCarColor
-        {
-            White = 0,
-            Green = 1,
-            Blue = 2,
-            Red = 3,
+            A = 0,
+            A1 = 1,
+            AB = 2,
+            B2 = 3,
         }
 
         public enum eNumberOfDoors
@@ -38,12 +36,12 @@ namespace Ex03.GarageLogic
             Five = 3
         }
 
-        public enum eLicenseType
+        [Flags]
+        public enum eStatusInGarage
         {
-            A = 0,
-            A1 = 1,
-            AB = 2,
-            B2 = 3,
+            InRepair = 1,
+            Repaired = 2,
+            Paid = 4,
         }
     }
 }

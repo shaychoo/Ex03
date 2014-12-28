@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ex03.GarageLogic.BaseEntities
+﻿namespace Ex03.GarageLogic.BaseEntities
 {
     public class VehicleInGarageInfo
     {
@@ -22,7 +18,8 @@ namespace Ex03.GarageLogic.BaseEntities
 
         public override string ToString()
         {
-            return string.Format("Owner name: {0}, Owner phone number: {1}, Status in garage: {2}", OwnerName, OwnerPhone, StatusInGarage);
+            return string.Format("Owner name: {0}, Owner phone number: {1}, Status in garage: {2}", OwnerName,
+                OwnerPhone, StatusInGarage);
         }
     }
 }

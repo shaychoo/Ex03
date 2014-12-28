@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ex03.GarageLogic.Exceptions
 {
@@ -16,8 +14,14 @@ namespace Ex03.GarageLogic.Exceptions
             r_MinValue = i_MinValue;
         }
 
-        public float MaxValue { get { return r_MaxValue; } }
+        public float MaxValue
+        {
+            get { return r_MaxValue; }
+        }
 
-        public float MinValue { get { return r_MinValue; } }
+        public float MinValue
+        {
+            get { return r_MinValue; }
+        }
     }
 }
