@@ -24,8 +24,9 @@ namespace Ex03.GarageLogic.EnergySources
 
         public override void Fill(float i_Amount)
         {
-            Helpers.AddingValueInRangeCheck(i_Amount, CurrentEnergyAmount, k_MinimumEnergyFillingValue,
-                ElectricityFillingInfo.MaximumAmount);
+            string valueName = "Amount of electricity to add";
+            Helpers.IsPossibleAddingValueInRangeCheck(i_Amount, CurrentEnergyAmount, k_MinimumEnergyFillingValue,
+                ElectricityFillingInfo.MaximumAmount, valueName);
             CurrentEnergyAmount += i_Amount;
         }
 

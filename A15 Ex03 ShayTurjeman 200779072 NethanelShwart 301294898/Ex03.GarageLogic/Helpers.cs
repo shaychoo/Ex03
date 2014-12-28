@@ -8,20 +8,20 @@ namespace Ex03.GarageLogic
 {
     public static class Helpers
     {
-        public static void AddingValueInRangeCheck(float i_ValueToAdd, float i_CurrentValue, float i_MinimumValue,
-            float i_MaximumVlaue)
+        public static void IsPossibleAddingValueInRangeCheck(float i_ValueToAdd, float i_CurrentValue,
+            float i_MinimumValue, float i_MaximumVlaue, string i_ValueName)
         {
             float maxAllowedAddingValue = i_MaximumVlaue - i_CurrentValue;
 
             if (i_ValueToAdd < i_MinimumValue)
             {
                 throw new ValueOutOfRangeException(i_MinimumValue, maxAllowedAddingValue,
-                    "Trying to add less then minimum allowed value");
+                    string.Format("{0} value is less then minimum allowed value", i_ValueName));
             }
-            if (i_ValueToAdd > maxAllowedAddingValue)
+            if (Math.Round(i_ValueToAdd,1) > Math.Round(maxAllowedAddingValue,1))
             {
                 throw new ValueOutOfRangeException(i_ValueToAdd, maxAllowedAddingValue,
-                    "Trying to add more then maximum allowed value");
+                    string.Format("{0} value is more then maximum allowed value", i_ValueName));
             }
         }
 
@@ -57,7 +57,7 @@ namespace Ex03.GarageLogic
 
             bool isInCorrectFormat = true;
 
-            for (int i = 0 ; i < i_OwnerPhone.Length ; i++)
+            for (int i = 0; i < i_OwnerPhone.Length; i++)
             {
                 if (i != 3)
                 {
@@ -92,7 +92,7 @@ namespace Ex03.GarageLogic
 
             bool isInCorrectFormat = true;
 
-            for (int i = 0 ; i < i_LicensePlate.Length ; i++)
+            for (int i = 0; i < i_LicensePlate.Length; i++)
             {
                 if (i != 2 && i != 6)
                 {

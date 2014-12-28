@@ -15,14 +15,11 @@ namespace Ex03.GarageManagementSystem.ConsoleUI
             Console.WriteLine("Welcome to Garage Manager!");
             try
             {
-
-
-
                 string owner = "Yossi";
                 string phoneNumber = "050-1234567";
                 VehicleCreation.eVehicleType vehicleType = VehicleCreation.eVehicleType.Car;
-                VehicleCreation.eEnergySourceType energySourceType = VehicleCreation.eEnergySourceType.Fuel;
-                float currentEnergyAmount = 40.0f;
+                VehicleCreation.eEnergySourceType energySourceType = VehicleCreation.eEnergySourceType.Electricity;
+                float currentEnergyAmount = 1.0f;
                 string vehicleModelName = "KIA";
                 string wheelsManufacturerName = "Michelin";
                 string licensePlate = "12-345-67";
@@ -36,7 +33,7 @@ namespace Ex03.GarageManagementSystem.ConsoleUI
                     currentEnergyAmount,
                     vehicleModelName, wheelsManufacturerName, licensePlate, currentAirPressure, specificCarParams);
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
 
                 writeErrorMessage(e.Message);
@@ -49,9 +46,11 @@ namespace Ex03.GarageManagementSystem.ConsoleUI
             string selectedAction = string.Empty;
             do
             {
-                Console.WriteLine(@"
+                try
+                {
+                    Console.WriteLine(@"
 Press 1 to enter new car to the garage
-Press 2 to see the vehicles in garage list
+Press 2 to see the vehicles in garage list by states
 Press 3 to change vehicle state in garage
 Press 4 to inflate vehicle wheels
 Press 5 to add fuel to a vehicle
@@ -59,12 +58,17 @@ Press 6 to charge to a vehicle
 Press 7 to see vehicle full details
 Press q to exit
 ");
-                selectedAction = Console.ReadLine();
-                if (selectedAction.ToLower() == "q")
-                {
-                    break;
+                    selectedAction = Console.ReadLine();
+                    if (selectedAction.ToLower() == "q")
+                    {
+                        break;
+                    }
+                    handleMenuChoice(selectedAction);
                 }
-                handleMenuChoice(selectedAction);
+                catch (Exception e)
+                {
+                    writeErrorMessage(e.Message);
+                }
             } while (true);
         }
 
@@ -81,18 +85,23 @@ Press q to exit
                     case eMainAction.NewVehicle:
                         enterNewVehicleToGarage();
                         break;
-                    case eMainAction.VehiclesList:
+                    case eMainAction.VehiclesListByStatus:
+                        vehiclesLicensePlatesListByStatus();
                         break;
                     case eMainAction.ChangeVehicleState:
+                        changeVehicleState();
                         break;
                     case eMainAction.InflateWheels:
+                        inflateWheels();
                         break;
                     case eMainAction.Refuel:
+                        refuel();
                         break;
                     case eMainAction.Recharge:
+                        recharge();
                         break;
                     case eMainAction.ShowDetails:
-                        Console.WriteLine(r_GarageManager.GetVehiclesDetails());
+                        showDetails();
                         break;
                     default:
                         inputIsValid = false;
@@ -104,6 +113,160 @@ Press q to exit
             {
                 writeInputIsNotValidErrorMessage();
             }
+        }
+
+        private void recharge()
+        {
+            float amountToRecharge = getFloatUserInput("Select amount to recharge:");
+            string licensePlate = getInGarageLicensePlate();
+
+            r_GarageManager.RechargeElectricity(licensePlate, amountToRecharge);
+            writeSuccessMessage("Vehicle is recharged!");
+        }
+
+        private void refuel()
+        {
+            Enums.eFuelType fuelType = getEnumValueFromUserByType<Enums.eFuelType>("Select fuel type:");
+            float amountToRefill = getFloatUserInput("Select amount to refuel:");
+            string licensePlate = getInGarageLicensePlate();
+
+            r_GarageManager.RefillFuel(licensePlate, fuelType, amountToRefill);
+            writeSuccessMessage("Vehicle is refueled!");
+        }
+
+        private void inflateWheels()
+        {
+            string licensePlate = getInGarageLicensePlate();
+
+            r_GarageManager.InflateWheelsToMaximum(licensePlate);
+
+            writeSuccessMessage("The wheels are inflated!");
+        }
+
+        private void writeSuccessMessage(string i_Message)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(string.Format("{0}{1}{0}", Environment.NewLine, i_Message));
+            Console.ResetColor();
+        }
+
+        private void changeVehicleState()
+        {
+            string licensePlate = getInGarageLicensePlate();
+            Enums.eStatusInGarage newStateInGarage =
+                getEnumValueFromUserByType<Enums.eStatusInGarage>("Select new state for vehicle:");
+
+            r_GarageManager.ChangeCarStatuse(licensePlate, newStateInGarage);
+
+            writeSuccessMessage("State has changed!");
+        }
+
+        private string getInGarageLicensePlate()
+        {
+            string licensePlate;
+            bool inputIsValid = true;
+
+            do
+            {
+                licensePlate = getVehicleLicensePlate("Select license plate:");
+                inputIsValid = r_GarageManager.IsLicensePlateInGarage(licensePlate);
+
+                if (!inputIsValid)
+                {
+                    writeInputIsNotValidErrorMessage();
+                }
+            } while (!inputIsValid);
+            return licensePlate;
+        }
+
+        private void vehiclesLicensePlatesListByStatus()
+        {
+            string messageToUser = "Select status in garage to show (you can select more then one divided by comma):";
+            Enums.eStatusInGarage neededStatuss = getNeededVehicleStatussStatus(messageToUser);
+            List<string> licensePlates = r_GarageManager.GetVehiclesLicensePlatesByStatussInGarage(neededStatuss);
+
+            if (licensePlates.Count == 0)
+            {
+                writeErrorMessage("There are no license plate to show.");
+            }
+            else
+            {
+                StringBuilder licensePlatesBuilder = new StringBuilder();
+                foreach (var licensePlate in licensePlates)
+                {
+                    licensePlatesBuilder.AppendLine(licensePlate);
+                }
+                writeSuccessMessage(licensePlatesBuilder.ToString());
+            }
+        }
+
+        private Enums.eStatusInGarage getNeededVehicleStatussStatus(string messageToUser)
+        {
+            string optionsToSelect;
+            Array statussInGarage = getEnumValuesArray<Enums.eStatusInGarage>(out optionsToSelect);
+            bool inputIsValid = true;
+            List<int> neededStatuss = new List<int>();
+
+            do
+            {
+                string userInput = getSimpleStringFromUser(string.Format(@"
+{0}
+{1}
+", messageToUser, optionsToSelect));
+                string[] allSelections = userInput.Replace(" ", string.Empty).Split(',');
+                foreach (string selectedStatus in allSelections)
+                {
+                    int value;
+                    inputIsValid = int.TryParse(selectedStatus, out value)
+                                   && value > 0
+                                   && value < statussInGarage.Length + 1;
+                    if (!inputIsValid)
+                    {
+                        writeInputIsNotValidErrorMessage();
+                        neededStatuss.Clear();
+                        break;
+                    }
+                    else
+                    {
+                        neededStatuss.Add(value);
+                    }
+                }
+            } while (!inputIsValid);
+
+            Enums.eStatusInGarage neededState = (Enums.eStatusInGarage)statussInGarage.GetValue(neededStatuss[0] - 1);
+            for (int i = 1; i < neededStatuss.Count; i++)
+            {
+                neededState = neededState | (Enums.eStatusInGarage)statussInGarage.GetValue(neededStatuss[i] - 1);
+            }
+
+            return neededState;
+        }
+
+        private void showDetails()
+        {
+            List<string> vehiclesDetails = r_GarageManager.GetVehiclesDetails();
+            string messageToWrite;
+
+            if (vehiclesDetails.Count == 0)
+            {
+                messageToWrite = "There are no vehicles in the garage";
+            }
+            else
+            {
+                StringBuilder vehiclesDetailsStringBuilder = new StringBuilder();
+                string dividingLine = "*************************************************************";
+                foreach (var vehicleDetails in vehiclesDetails)
+                {
+                    vehiclesDetailsStringBuilder.Append(string.Format(@"
+{0}
+{1}
+", dividingLine, vehicleDetails));
+                }
+                vehiclesDetailsStringBuilder.Append(dividingLine);
+                messageToWrite = vehiclesDetailsStringBuilder.ToString();
+            }
+
+            Console.WriteLine(messageToWrite);
         }
 
         private void enterNewVehicleToGarage()
@@ -118,33 +281,35 @@ Press q to exit
 
                 messageToUser = "Enter phone number (In format XXX-XXXXXXX):";
                 phoneNumber = getOwnerPhoneNumber(messageToUser);
-                
+
                 messageToUser = "Select vehicle type:";
                 VehicleCreation.eVehicleType vehicleType = getEnumValueFromUserByType<VehicleCreation.eVehicleType>(messageToUser);
-                
+
                 messageToUser = "Select energy source type:";
                 VehicleCreation.eEnergySourceType energySourceType = getEnumValueFromUserByType<VehicleCreation.eEnergySourceType>(messageToUser);
-                
+
                 messageToUser = string.Format("Enter {0} current energy amount:", energySourceType.ToString());
                 currentEnergyAmount = getFloatUserInput(messageToUser);
-                
+
                 messageToUser = "Enter vehicle model name:";
                 vehicleModelName = getSimpleStringFromUser(messageToUser);
 
                 messageToUser = "Enter wheels manufacturer name:";
-                wheelsManufacturerName = getSimpleStringFromUser(messageToUser); 
+                wheelsManufacturerName = getSimpleStringFromUser(messageToUser);
 
                 messageToUser = "Enter license plate (In format XX-XXX-XX):";
                 licensePlate = getVehicleLicensePlate(messageToUser);
 
                 messageToUser = "Enter current air pressure:";
                 currentAirPressure = getFloatUserInput(messageToUser);
-                
+
                 object[] specificVehicleParams = getSpecificVehicleParams(vehicleType);
-                
+
                 r_GarageManager.EnterVehicleToGarage(ownerName, phoneNumber, vehicleType, energySourceType,
-                    currentEnergyAmount, vehicleModelName, wheelsManufacturerName, licensePlate,currentAirPressure,
+                    currentEnergyAmount, vehicleModelName, wheelsManufacturerName, licensePlate, currentAirPressure,
                     specificVehicleParams);
+
+                writeSuccessMessage(string.Format("New {0} entered with license plate: {1}!", vehicleType.ToString(), licensePlate));
             }
             catch (Exception i_Exception)
             {
@@ -240,19 +405,14 @@ Press q to exit
             int selectedValue;
             string userInput;
             bool inputIsValid = true;
-            Array valuesArray = Enum.GetValues(typeof(T));
-            StringBuilder optionsToSelect = new StringBuilder();
-
-            for (int i = 0 ; i < valuesArray.Length ; i++)
-            {
-                optionsToSelect.Append(string.Format("{0}. {1}{2}", i + 1, valuesArray.GetValue(i), Environment.NewLine));
-            }
+            string optionsToSelect;
+            Array valuesArray = getEnumValuesArray<T>(out optionsToSelect);
 
             do
             {
                 userInput = getSimpleStringFromUser(string.Format(@"
 {0}
-{1}",i_MessageToUser, optionsToSelect));
+{1}", i_MessageToUser, optionsToSelect));
                 inputIsValid = int.TryParse(userInput, out selectedValue)
                            && selectedValue > 0
                            && selectedValue < valuesArray.Length + 1;
@@ -263,6 +423,20 @@ Press q to exit
             } while (!inputIsValid);
 
             return (T)valuesArray.GetValue(selectedValue - 1);
+        }
+
+        private static Array getEnumValuesArray<T>(out string optionsToSelect)
+        {
+            Array valuesArray = Enum.GetValues(typeof(T));
+            StringBuilder optionsToSelectBuilder = new StringBuilder();
+
+            for (int i = 0; i < valuesArray.Length; i++)
+            {
+                optionsToSelectBuilder.Append(string.Format("{0}. {1}{2}", i + 1, valuesArray.GetValue(i), Environment.NewLine));
+            }
+
+            optionsToSelect = optionsToSelectBuilder.ToString();
+            return valuesArray;
         }
 
         private string getSimpleStringFromUser(string i_MessageToUser)
@@ -307,7 +481,7 @@ Press q to exit
         private enum eMainAction
         {
             NewVehicle = 1,
-            VehiclesList = 2,
+            VehiclesListByStatus = 2,
             ChangeVehicleState = 3,
             InflateWheels = 4,
             Refuel = 5,

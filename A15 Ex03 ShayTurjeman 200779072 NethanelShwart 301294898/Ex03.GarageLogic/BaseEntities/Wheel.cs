@@ -24,7 +24,9 @@ namespace Ex03.GarageLogic.BaseEntities
 
         public void Inflate(float i_Amount)
         {
-            Helpers.AddingValueInRangeCheck(i_Amount, CurrentAirPressure, k_MinInflatingValue, MaximumAirPressure);
+            string valueName = "Amount of air to inflate";
+            Helpers.IsPossibleAddingValueInRangeCheck(i_Amount, CurrentAirPressure, k_MinInflatingValue,
+                MaximumAirPressure, valueName);
             CurrentAirPressure += i_Amount;
         }
 
