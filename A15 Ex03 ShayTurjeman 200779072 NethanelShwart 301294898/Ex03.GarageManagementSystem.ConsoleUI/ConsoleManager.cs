@@ -38,7 +38,9 @@ Press q to exit
                         break;
                     }
                     handleMenuChoice(selectedAction);
+                     
                 }
+
                 catch (Exception e)
                 {
                     writeErrorMessage(e.Message);
@@ -100,12 +102,24 @@ Press q to exit
 
         private void refuel()
         {
-            Enums.eFuelType fuelType = getEnumValueFromUserByType<Enums.eFuelType>("Select fuel type:");
-            float amountToRefill = getFloatUserInput("Select amount to refuel:");
-            string licensePlate = getInGarageLicensePlate();
+            try
+            {
+                Enums.eFuelType fuelType = getEnumValueFromUserByType<Enums.eFuelType>("Select fuel type:");
+                float amountToRefill = getFloatUserInput("Select amount to refuel:");
+                string licensePlate = getInGarageLicensePlate();
 
-            r_GarageManager.RefillFuel(licensePlate, fuelType, amountToRefill);
-            writeSuccessMessage("Vehicle is refueled!");
+                r_GarageManager.RefillFuel(licensePlate, fuelType, amountToRefill);
+                writeSuccessMessage("Vehicle is refueled!");
+            }
+            catch (ArgumentException i_ArgumentException)
+            {
+                writeExceptionMessage("One or more of the arguments are wrong.",i_ArgumentException);
+            }
+        }
+
+        private void writeExceptionMessage(string p, ArgumentException i_ArgumentException)
+        {
+            throw new NotImplementedException();
         }
 
         private void inflateWheels()

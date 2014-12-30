@@ -45,7 +45,7 @@
     <Compile Include="BaseEntities\EnergySource.cs" />
     <Compile Include="BaseEntities\Wheel.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="Exceptions\NotInGarageException.cs" />
+    <Compile Include="Exceptions\VehicleStateInGarageException.cs" />
     <Compile Include="Exceptions\ValueOutOfRangeException.cs" />
     <Compile Include="GarageManager.cs" />
     <Compile Include="BaseEntities\Vehicle.cs" />
